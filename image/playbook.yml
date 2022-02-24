@@ -1,0 +1,83 @@
+---
+- name: Configure Image
+  hosts: 127.0.0.1
+  connection: local
+  become: true
+  become_user: root
+  become_method: sudo
+
+  tasks:
+    - name: Ensure Flask is installed
+      shell: sudo pip3 install flask
+
+    - name: Ensure conf.d directory exists
+      file:
+        path: /var/www
+        state: directory
+
+    - name: Ensure web files are uploaded
+      copy:
+        src: /tmp/app.py
+        dest: /var/www/app.py
+
+    - name: Ensure Flask service is setup
+      copy:
+        src: /tmp/flask.service
+        dest: /etc/systemd/system/flask.service
+
+    - name: Ensure nginx is installed
+      yum:
+        name: nginx
+        state: latest
+        disable_gpg_check: true
+
+    - name: Ensure Flask service is setup
+      copy:
+        src: /tmp/default.conf
+        dest: /etc/nginx/conf.d/default.conf
+#
+##    - name: Adding nginx proxy configuration
+ #     blockinfile:
+ ##       dest: /etc/nginx/nginx.conf
+  #      block: |
+  #        location / {
+  #        root         /usr/share/nginx/html;
+  #        proxy_pass http://127.0.0.1:5000/;
+  #           }
+  #      insertafter: "^include /etc/nginx/default.d/*.conf"
+
+    - name: Ensure libsemanage-python support is installed
+      yum:
+        name: policycoreutils-python
+        state: present
+
+    - name: Enable httpd_can_network_connect flag on and keep it persistent
+      seboolean:
+        name: httpd_can_network_connect
+        state: true
+        persistent: true
+
+    - name: Enable services
+      systemd:
+        name: "{{ item }}"
+        daemon_reload: true
+        enabled: true
+      with_items:
+        - flask.service
+        - nginx.service
+
+    - name: ensure nginx service is started
+      service:
+        name: nginx
+        state: started
+      become: true
+
+    - name: ensure nginx service is restarted
+      service:
+        name: nginx
+        state: restarted
+      become: true
+
+
+
+
