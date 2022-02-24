@@ -6,4 +6,4 @@
 
 ### image\packer-build.json will build the packer image with nhinx and flask configured in it.
 
-### terraform executing terraform commands like init , plan , apply will create EC2 instances from the AMI created from packer. By default I have kept the EC2 instances to 4 and it can be scale up to any number by changing the relative value for var.size_default in varibles
+### Terraform to build the instances in AWS cloud by running terraform commands like init , plan , apply from Terraform directory will create EC2 instances from the AMI created from packer. By default I have kept the EC2 instances to 4 and it can be scale up to any number by changing the relative value for var.size_default in varibles
