@@ -1,9 +1,23 @@
-# Demo on Scaling up EC2 instances in AWS Cloud with webserver running on it
+# Goal : Scaling up EC2 instances in AWS Cloud with webserver running on it
 
-### This project demonistrates setting up AWS EC2 web instances running Nginx and Flask using Terraform using an ami build from packer
+This project demonstrates building an AMI with nginx and flask from packer and launching the EC2 instance using terraform
 
-### AMI is created from packer includes nginx and flask installed in it from ansible play books shell scripts in image folder 
+## Tools Used
 
-### image\packer-build.json will build the packer image with nhinx and flask configured in it.
+AWS cloud
+Hashicorp Packer
+Terraform
+Ansible
+Nginx
+flask
 
-### Terraform to build the instances in AWS cloud by running terraform commands like init , plan , apply from Terraform directory will create EC2 instances from the AMI created from packer. By default I have kept the EC2 instances to 4 and it can be scale up to any number by changing the relative value for var.size_default in varibles
+## Directory structure and project execution 
+
+AMI is created from packer includes nginx and flask installed in it from ansible playbooks,shell scripts in image folder 
+
+ image\packer-build.json will build the AMI with nginx and flask configured in it.
+
+ Terraform to build the instances in AWS cloud by running terraform commands like init , plan , apply from Terraform directory will create EC2 instances from the AMI created from packer. By default I have kept the EC2 instances to 4 and it can be scale up to any number by changing the relative value for var.size_default in varibles.
+
+ Snapshots are added to the snapshots folder with the expected output from each execution.
+
